@@ -84,7 +84,6 @@ Hb = Tb + spdiagm(Vb[:])
 
 default(c=cgrad(:viridis, rev=true))
 
-pg, pb
 with(ratio=1, xlabel="x [nm]", ylabel="y [nm]") do
 	global pg = heatmap(x, y, Vg)
 	global pb = heatmap(x, y, Vb)
