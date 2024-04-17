@@ -60,6 +60,32 @@ function hamiltonian(x, y, potential::Function; mass = 1, Δ = 1)
 	T, V
 end
 
+function eigenvectors(A)
+	if ndims(A) != 2 || size(A)[1] != size(A)[2]
+		error("A must be a square matrix")
+	end
+	n = size(A)[1]
+	v = zeros(n)
+	α = zeros(n)
+	β = zeros(n)
+	β[1] = 1
+	j = 1
+	w = zeros(n)
+	while β[j] != 0
+		if j != 1
+			t = w
+			w = v ./ β[j]
+			v = -β[j] * t
+		end
+		v = A * w + v
+		j += 1
+		α[j] = w' * v
+		v -= α[j] * w
+		β[j] = norm(v)
+	end
+	α, β
+end
+
 V0 = 2   # [eV]
 σ = 2    # [nm]
 potential_gauss(x, y) = potential_gauss(x, y, V0, σ)
