@@ -60,7 +60,30 @@ function hamiltonian(x, y, potential::Function; mass = 1, Δ = 1)
 	T, V
 end
 
-function eigenvectors(A)
+function eigenvectors_1(A, q)
+	n = size(A, 1)
+	α = zeros(n+1)
+	β = zeros(n)
+
+	q = q ./ norm(q)
+	α[1] = q' * A * q
+	r = A * q - α[1] * q
+	β[1] = norm(r)
+	qprev = q
+	q = r ./ β[1]
+
+	for j in 2:n
+		α[j] = q' * A * q
+		r = A * q - α[j] * q - β[j-1] * qprev
+		β[j] = norm(r)
+		qprev = q
+		q = r ./ β[j]
+	end
+	α[end] = q' * A * q
+	α,β
+end
+
+function eigenvectors_2(A)
 	if ndims(A) != 2 || size(A)[1] != size(A)[2]
 		error("A must be a square matrix")
 	end
@@ -118,4 +141,10 @@ end
 display(pg)
 display(pb)
 
-#end
+# α,β = eigenvectors_1(rand(4,4), rand(4))
+α,β = eigenvectors_1(Hg, Hg[:,1])
+# α,β = eigenvectors_2(Hg)
+
+# T = SymTridiagonal(α[2:end], β[2:end])
+# eg = eigvecs(T);
+eg = eigvecs(Array(Hg))
