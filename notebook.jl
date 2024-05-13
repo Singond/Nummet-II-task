@@ -16,8 +16,6 @@ end
 
 # ╔═╡ 36c853f2-1145-11ef-364f-75b6e985de80
 # ╠═╡ show_logs = false
-# ╠═╡ skip_as_script = true
-#=╠═╡
 begin
 	import Pkg
 	Pkg.activate(Base.current_project())
@@ -28,7 +26,6 @@ begin
 
 	using Plots
 end
-  ╠═╡ =#
 
 # ╔═╡ 73286b82-618c-40fb-80c4-f7cd8547b5cd
 md"""
@@ -36,7 +33,6 @@ md"""
 """
 
 # ╔═╡ ea5bc82e-0283-4bde-8c98-c439edb3c13c
-#=╠═╡
 """
 Return a tridiagonal matrix `T` and orthonormal matrix `V`
 such that `T = V' * A * V`.
@@ -75,10 +71,8 @@ function lanczos_wiki(A, m=size(A, 1), v=A[:,1])
 	T = SymTridiagonal(α, β[2:end])
 	T, V
 end
-  ╠═╡ =#
 
 # ╔═╡ 754b31c7-4526-4411-9c0f-1c64f2d4d096
-#=╠═╡
 """
 Return the first `m` eigenvectors of matrix `A`.
 
@@ -89,10 +83,8 @@ function eigvecs_wiki(A, m=size(A,1), v=A[:,1])
 	t = LinearAlgebra.eigvecs(T)
 	V * t
 end
-  ╠═╡ =#
 
 # ╔═╡ 9d94d614-ae23-4e58-84ff-0e597877e896
-#=╠═╡
 """
 Return the eigenvectors of matrix `A`.
 
@@ -121,10 +113,8 @@ function eigvecs_custom(A, q)
 	α[end] = q' * A * q
 	α,β
 end
-  ╠═╡ =#
 
 # ╔═╡ 2002c9dc-bf92-4706-82c2-f5377ef2a7e8
-#=╠═╡
 """
 Return the eigenvectors of matrix `A`.
 
@@ -155,12 +145,9 @@ function eigvecs_old(A)
 	end
 	α, β
 end
-  ╠═╡ =#
 
 # ╔═╡ aa6ddcbf-83aa-4a77-9f5d-08ff33ffd04a
-#=╠═╡
 eigenvectors = eigvecs_wiki
-  ╠═╡ =#
 
 # ╔═╡ 24f01b2e-e881-4e1a-b2bc-c9ad2ec61f5e
 md"Planckova konstanta v Js:"
@@ -186,7 +173,6 @@ Pomocné funkce:
 """
 
 # ╔═╡ a69d7555-ec14-48ee-a4c4-3272ddaac019
-#=╠═╡
 function diff2(indices)
 	n = maximum(indices)::Int
 	ni = size(indices, 1)
@@ -210,17 +196,14 @@ function diff2(indices)
 	end
 	D
 end
-  ╠═╡ =#
 
 # ╔═╡ a5793352-2a91-4cb4-96db-ef21973767f3
-#=╠═╡
 function hamiltonian(x, y, potential::Function; mass = 1, Δ = 1)
 	D = diff2(LinearIndices((length(x), length(y))))
 	T = (-planckr^2 / 2mass) * D / Δ^2
 	V = potential.(x', y)
 	T, V
 end
-  ╠═╡ =#
 
 # ╔═╡ b0efb7d6-cd96-4108-97e8-da8e5d00b65f
 md"""
@@ -238,30 +221,22 @@ L = 10   # [nm]
 md"Pomocné vektory $x$ a $y$ představující prostorové souřadnice:"
 
 # ╔═╡ 336a696f-2545-4f88-928c-1aaed4100988
-#=╠═╡
 x = LinRange(-L/2, L/2, N)
-  ╠═╡ =#
 
 # ╔═╡ ff508904-d8f4-406f-a530-877ac212d8d6
-#=╠═╡
 y = LinRange(-L/2, L/2, N)
-  ╠═╡ =#
 
 # ╔═╡ 0379f1a2-eaae-4c6d-8324-29b3b0f306ca
 md"Diference $x$ (též $y$):"
 
 # ╔═╡ 8b6cf25c-31be-4f0f-b226-7d7137d24ed5
-#=╠═╡
 Δ = x[2] - x[1]
-  ╠═╡ =#
 
 # ╔═╡ eb21a633-a15b-4670-89e1-b4beb1d2f9b5
 md"Obecné nastavení grafů:"
 
 # ╔═╡ 0edfd386-6b70-4884-aba8-d1964d9cdc97
-#=╠═╡
 default(c=cgrad(:viridis, rev=true))
-  ╠═╡ =#
 
 # ╔═╡ d91aec6c-ab70-4538-ae16-3127ecc2a793
 md"""
@@ -276,11 +251,9 @@ kde $V_0 = 2\,\text{eV}$ a $\sigma = 2\,\text{nm}$.
 """
 
 # ╔═╡ 8c51ef55-7e49-424f-85cf-315fa5e92836
-#=╠═╡
 function potential_gauss(x, y, V0, σ)
 	-V0 * exp(-(x^2 + y^2) / 2σ^2)
 end
-  ╠═╡ =#
 
 # ╔═╡ 92694d37-2612-4a36-9809-6fe28811af07
 potential_gauss(x, y) = potential_gauss(x, y, 2, 2)
@@ -289,24 +262,18 @@ potential_gauss(x, y) = potential_gauss(x, y, 2, 2)
 md"Složky hamiltoniánu:"
 
 # ╔═╡ c75116f1-5e8a-438a-a349-047283ac701f
-#=╠═╡
 Tg, Vg = hamiltonian(x, y, potential_gauss, Δ=Δ, mass=electronmass)
-  ╠═╡ =#
 
 # ╔═╡ fa2b4e05-e07b-408d-886d-3f375da26f35
-#=╠═╡
 with(ratio=1, title="potenciál V_g") do
 	heatmap(x, y, Vg, xlabel="x [nm]", ylabel="y [nm]")
 end
-  ╠═╡ =#
 
 # ╔═╡ 55452732-7f91-4493-85ef-6dba712f33b0
 md"Hamiltonián:"
 
 # ╔═╡ 026934ec-6f67-45f4-bfec-fc44ab6fa913
-#=╠═╡
 Hg = Tg * (1E18 / elemcharge) + spdiagm(Vg[:])
-  ╠═╡ =#
 
 # ╔═╡ 648af4da-437f-4207-bb63-200b29ff1243
 md"""
@@ -314,20 +281,16 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ a3b74a06-c25e-4ecc-bfb1-c669e735809b
-#=╠═╡
 eg = eigenvectors(Hg, 41)
-  ╠═╡ =#
 
 # ╔═╡ 3c8b44de-2986-4cbb-aca3-fd88b78dee6b
 @bind kg html"<input type='range' min='1' max='41'>"
 
 # ╔═╡ 11a63b16-1f0d-49d4-8a15-0cb726e2627a
-#=╠═╡
 with(ratio=1, title="vlastní vektor $(kg)") do
 	heatmap(x, y, reshape(eg[:,kg], N, N),
 		xlabel="x [nm]", ylabel="y [nm]")
 end
-  ╠═╡ =#
 
 # ╔═╡ b14e5668-fbc6-4a8b-b613-c37335abfa77
 md"""
@@ -344,7 +307,6 @@ kde $V_0 = 2\,\text{eV}$, $\sigma = 0{,}8\,\text{nm}$ a $R = 2\,\text{nm}$.
 """
 
 # ╔═╡ b206e6a2-6b00-4863-aecb-833f17e9fc77
-#=╠═╡
 function potential_c6v(x, y, V0, σ, R)
 	v = 0
 	for n in [1 2 3 4 5 6]
@@ -353,7 +315,6 @@ function potential_c6v(x, y, V0, σ, R)
 	end
 	-V0 * v
 end
-  ╠═╡ =#
 
 # ╔═╡ 5d3807b6-fdde-4758-8955-77816f2758c5
 potential_c6v(x, y) = potential_c6v(x, y, 2, 0.8, 2)
@@ -362,24 +323,18 @@ potential_c6v(x, y) = potential_c6v(x, y, 2, 0.8, 2)
 md"Složky hamiltoniánu:"
 
 # ╔═╡ 1c99a8a8-2f87-43b9-9316-1724e387ad3d
-#=╠═╡
 Tb, Vb = hamiltonian(x, y, potential_c6v, Δ=Δ, mass=electronmass)
-  ╠═╡ =#
 
 # ╔═╡ 2ff59f98-598b-444f-9be6-67b212ee4fe2
-#=╠═╡
 with(ratio=1, title="potenciál V_b") do
 	heatmap(x, y, Vb, xlabel="x [nm]", ylabel="y [nm]")
 end
-  ╠═╡ =#
 
 # ╔═╡ fa3ee0f0-0f8c-4146-ae2c-622050a57999
 md"Hamiltonián:"
 
 # ╔═╡ 6579d3bb-bf7e-46c2-ae8b-11627be11b11
-#=╠═╡
 Hb = Tb * (1E18 / elemcharge) + spdiagm(Vb[:])
-  ╠═╡ =#
 
 # ╔═╡ e59cfa75-c127-4fde-bea2-af97f2857dcd
 md"""
@@ -387,20 +342,16 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ 952eeef1-f3bc-48bd-a974-21d4dea587aa
-#=╠═╡
 eb = eigenvectors(Hb, 41)
-  ╠═╡ =#
 
 # ╔═╡ 6f7138ab-133a-4e2a-9a56-87754b368450
 @bind kb html"<input type='range' min='1' max='41'>"
 
 # ╔═╡ 16e7014f-d553-4a08-9dec-0e5f33946c3f
-#=╠═╡
 with(ratio=1, title="vlastní vektor $(kb)") do
 	heatmap(x, y, reshape(eb[:,kb], N, N),
 		xlabel="x [nm]", ylabel="y [nm]")
 end
-  ╠═╡ =#
 
 # ╔═╡ Cell order:
 # ╟─73286b82-618c-40fb-80c4-f7cd8547b5cd
