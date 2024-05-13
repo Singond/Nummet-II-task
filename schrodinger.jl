@@ -3,9 +3,57 @@ using SparseArrays
 
 using Plots
 
-#module Schrodinger
+module Lanczos
 
-#const global planckr = 1;
+using LinearAlgebra
+
+"""
+Return a tridiagonal matrix `T` and orthonormal matrix `V`
+such that `T = V' * A * V`.
+"""
+function lanczos(A, m=size(A, 1), v=A[:,1])
+	if ndims(A) != 2 || size(A)[1] != size(A)[2]
+		error("A must be a square matrix")
+	end
+	n = size(A, 1)
+	if (m > n)
+		error("m must be at most size of A")
+	end
+	α = zeros(m)
+	β = zeros(m)
+	V = zeros(n, m)
+
+	v = v ./ norm(v)
+	V[:,1] = v
+	w = A * v
+	α[1] = w' * v
+	w = w - α[1] * v
+
+	for j in 2:m
+		β[j] = norm(w)
+		if β[j] != 0
+			V[:,j] = w ./ β[j]
+		else
+			error("β == 0, j = $j")
+			v = rand(n)
+			V[:,j] = v ./ norm(v)
+		end
+		w = A * V[:,j]
+		α[j] = w' * V[:,j]
+		w = w - α[j] * V[:,j] - β[j] * V[:,j-1]
+	end
+	T = SymTridiagonal(α, β[2:end])
+	T, V
+end
+
+function eigvecs(A, m=size(A,1), v=A[:,1])
+	T, V = lanczos(A, m, v)
+	t = LinearAlgebra.eigvecs(T)
+	V * t
+end
+
+end
+
 #const global planck = 4.135667696E-15;      # [eVs]
 const global planckr = 1.054571817E-34;     # [Js]
 const global electronmass = 9.1093837E-31;  # [kg]
@@ -23,11 +71,6 @@ function potential_c6v(x, y, V0, σ, R)
 	end
 	-V0 * v
 end
-
-#function diff2(indices::Vector{CartesianIndex})
-#	D = zeros(length(indices), length(indices))
-#	#for ind in indices
-#end
 
 function diff2(indices)
 	n = maximum(indices)::Int
@@ -142,9 +185,12 @@ display(pg)
 display(pb)
 
 # α,β = eigenvectors_1(rand(4,4), rand(4))
-α,β = eigenvectors_1(Hg, Hg[:,1])
+# α,β = eigenvectors_1(Hg, Hg[:,1])
 # α,β = eigenvectors_2(Hg)
 
 # T = SymTridiagonal(α[2:end], β[2:end])
 # eg = eigvecs(T);
-eg = eigvecs(Array(Hg))
+# eg = eigvecs(Array(Hg))
+
+eg = Lanczos.eigvecs(Hg, 41)
+heatmap(reshape(eg[:,1], N, N))
