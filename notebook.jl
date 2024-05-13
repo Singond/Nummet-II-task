@@ -4,6 +4,16 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ 36c853f2-1145-11ef-364f-75b6e985de80
 # ╠═╡ show_logs = false
 # ╠═╡ skip_as_script = true
@@ -308,10 +318,13 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 eg = eigenvectors(Hg, 41)
   ╠═╡ =#
 
+# ╔═╡ 3c8b44de-2986-4cbb-aca3-fd88b78dee6b
+@bind kg html"<input type='range' min='1' max='41'>"
+
 # ╔═╡ 11a63b16-1f0d-49d4-8a15-0cb726e2627a
 #=╠═╡
-with(ratio=1) do
-	heatmap(x, y, reshape(eg[:,1], N, N),
+with(ratio=1, title="vlastní vektor $(kg)") do
+	heatmap(x, y, reshape(eg[:,kg], N, N),
 		xlabel="x [nm]", ylabel="y [nm]")
 end
   ╠═╡ =#
@@ -378,10 +391,13 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 eb = eigenvectors(Hb, 41)
   ╠═╡ =#
 
+# ╔═╡ 6f7138ab-133a-4e2a-9a56-87754b368450
+@bind kb html"<input type='range' min='1' max='41'>"
+
 # ╔═╡ 16e7014f-d553-4a08-9dec-0e5f33946c3f
 #=╠═╡
-with(ratio=1) do
-	heatmap(x, y, reshape(eb[:,1], N, N),
+with(ratio=1, title="vlastní vektor $(kb)") do
+	heatmap(x, y, reshape(eb[:,kb], N, N),
 		xlabel="x [nm]", ylabel="y [nm]")
 end
   ╠═╡ =#
@@ -423,6 +439,7 @@ end
 # ╠═026934ec-6f67-45f4-bfec-fc44ab6fa913
 # ╟─648af4da-437f-4207-bb63-200b29ff1243
 # ╠═a3b74a06-c25e-4ecc-bfb1-c669e735809b
+# ╠═3c8b44de-2986-4cbb-aca3-fd88b78dee6b
 # ╠═11a63b16-1f0d-49d4-8a15-0cb726e2627a
 # ╟─b14e5668-fbc6-4a8b-b613-c37335abfa77
 # ╠═b206e6a2-6b00-4863-aecb-833f17e9fc77
@@ -434,4 +451,5 @@ end
 # ╠═6579d3bb-bf7e-46c2-ae8b-11627be11b11
 # ╟─e59cfa75-c127-4fde-bea2-af97f2857dcd
 # ╠═952eeef1-f3bc-48bd-a974-21d4dea587aa
+# ╠═6f7138ab-133a-4e2a-9a56-87754b368450
 # ╠═16e7014f-d553-4a08-9dec-0e5f33946c3f
