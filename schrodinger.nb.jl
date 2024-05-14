@@ -37,7 +37,7 @@ md"""
 Return a tridiagonal matrix `T` and orthonormal matrix `V`
 such that `T = V' * A * V`.
 """
-function lanczos_wiki(A, m=size(A, 1), v=A[:,1])
+function lanczos_wiki(A, m, v)
 	if ndims(A) != 2 || size(A)[1] != size(A)[2]
 		error("A must be a square matrix")
 	end
@@ -61,7 +61,7 @@ function lanczos_wiki(A, m=size(A, 1), v=A[:,1])
 			V[:,j] = w ./ β[j]
 		else
 			error("β == 0, j = $j")
-			v = rand(n)
+			v = randn(n)
 			V[:,j] = v ./ norm(v)
 		end
 		w = A * V[:,j]
@@ -72,14 +72,20 @@ function lanczos_wiki(A, m=size(A, 1), v=A[:,1])
 	T, V
 end
 
+# ╔═╡ d0eb243d-e4bb-4a90-87a7-9037682133fc
+lanczos_wiki(A, m) = lanczos_wiki(A, m, randn(size(A, 1)))
+
+# ╔═╡ fb023d5b-03ab-4ece-8171-6a92e8ae0335
+lanczos_wiki(A) = lanczos_wiki(A, round(Int, size(A, 1) / 2))
+
 # ╔═╡ 754b31c7-4526-4411-9c0f-1c64f2d4d096
 """
 Return the first `m` eigenvectors of matrix `A`.
 
 This implementation is based on the Wikipedia article on Lanczos method.
 """
-function eigvecs_wiki(A, m=size(A,1), v=A[:,1])
-	T, V = lanczos_wiki(A, m, v)
+function eigvecs_wiki(A, args...)
+	T, V = lanczos_wiki(A, args...)
 	t = LinearAlgebra.eigvecs(T)
 	V * t
 end
@@ -281,7 +287,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ a3b74a06-c25e-4ecc-bfb1-c669e735809b
-eg = eigenvectors(Hg, 41)
+eg = eigenvectors(Hg, 200)
 
 # ╔═╡ 3c8b44de-2986-4cbb-aca3-fd88b78dee6b
 @bind kg html"<input type='range' min='1' max='41'>"
@@ -342,7 +348,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ 952eeef1-f3bc-48bd-a974-21d4dea587aa
-eb = eigenvectors(Hb, 41)
+eb = eigenvectors(Hb, 200)
 
 # ╔═╡ 6f7138ab-133a-4e2a-9a56-87754b368450
 @bind kb html"<input type='range' min='1' max='41'>"
@@ -357,6 +363,8 @@ end
 # ╟─73286b82-618c-40fb-80c4-f7cd8547b5cd
 # ╠═36c853f2-1145-11ef-364f-75b6e985de80
 # ╠═ea5bc82e-0283-4bde-8c98-c439edb3c13c
+# ╠═d0eb243d-e4bb-4a90-87a7-9037682133fc
+# ╠═fb023d5b-03ab-4ece-8171-6a92e8ae0335
 # ╠═754b31c7-4526-4411-9c0f-1c64f2d4d096
 # ╠═9d94d614-ae23-4e58-84ff-0e597877e896
 # ╠═2002c9dc-bf92-4706-82c2-f5377ef2a7e8

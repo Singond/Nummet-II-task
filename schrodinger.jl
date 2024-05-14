@@ -11,7 +11,7 @@ module Lanczos
 	Return a tridiagonal matrix `T` and orthonormal matrix `V`
 	such that `T = V' * A * V`.
 	"""
-	function lanczos_wiki(A, m=size(A, 1), v=A[:,1])
+	function lanczos_wiki(A, m, v)
 		if ndims(A) != 2 || size(A)[1] != size(A)[2]
 			error("A must be a square matrix")
 		end
@@ -46,13 +46,16 @@ module Lanczos
 		T, V
 	end
 
+	lanczos_wiki(A, m) = lanczos_wiki(A, m, randn(size(A, 1)))
+	lanczos_wiki(A) = lanczos_wiki(A, round(Int, size(A, 1) / 2))
+
 	"""
 	Return the first `m` eigenvectors of matrix `A`.
 
 	This implementation is based on the Wikipedia article on Lanczos method.
 	"""
-	function eigvecs_wiki(A, m=size(A,1), v=A[:,1])
-		T, V = lanczos_wiki(A, m, v)
+	function eigvecs_wiki(A, args...)
+		T, V = lanczos_wiki(A, args...)
 		t = LinearAlgebra.eigvecs(T)
 		V * t
 	end
@@ -207,5 +210,5 @@ display(pb)
 # eg = eigvecs_wiki(T);
 # eg = eigvecs_wiki(Array(Hg))
 
-eg = Lanczos.eigvecs_wiki(Hg, 41)
+eg = Lanczos.eigvecs_wiki(Hg)
 heatmap(reshape(eg[:,1], N, N))
