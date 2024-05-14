@@ -287,7 +287,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ a3b74a06-c25e-4ecc-bfb1-c669e735809b
-eg = eigenvectors(Hg, 800)
+eg = eigenvectors(Hg, 800, ones(N^2))
 
 # ╔═╡ 3c8b44de-2986-4cbb-aca3-fd88b78dee6b
 @bind kg html"k = <input type='number' value='1' min='1' max='41'>"

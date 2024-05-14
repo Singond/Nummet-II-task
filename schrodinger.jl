@@ -1,4 +1,5 @@
 using LinearAlgebra
+using Printf
 using SparseArrays
 
 using Plots
@@ -204,13 +205,14 @@ end
 display(pg)
 display(pb)
 
-# α,β = eigvecs_custom(rand(4,4), rand(4))
-# α,β = eigvecs_custom(Hg, Hg[:,1])
-# α,β = eigvecs_old(Hg)
+eg = Lanczos.eigenvectors(Hg, 800, ones(N^2))
+eb = Lanczos.eigenvectors(Hb, 800, ones(N^2))
 
-# T = SymTridiagonal(α[2:end], β[2:end])
-# eg = eigvecs_wiki(T);
-# eg = eigvecs_wiki(Array(Hg))
+#heatmap(reshape(eg[:,1], N, N))
 
-eg = Lanczos.eigenvectors(Hg, 800)
-heatmap(reshape(eg[:,1], N, N))
+for k in 1:24
+	savefig(heatmap(x, y, reshape(eg[:,k], N, N), ratio=1),
+		@sprintf "results/eig-gauss-%02d.pdf" k)
+	savefig(heatmap(x, y, reshape(eb[:,k], N, N), ratio=1),
+		@sprintf "results/eig-benzene-%02d.pdf" k)
+end
