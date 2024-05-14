@@ -60,6 +60,8 @@ module Lanczos
 		V * t
 	end
 
+	eigenvectors = eigvecs_wiki
+
 	"""
 	Return the eigenvectors of matrix `A`.
 
@@ -210,5 +212,5 @@ display(pb)
 # eg = eigvecs_wiki(T);
 # eg = eigvecs_wiki(Array(Hg))
 
-eg = Lanczos.eigvecs_wiki(Hg, 800)
+eg = Lanczos.eigenvectors(Hg, 800)
 heatmap(reshape(eg[:,1], N, N))
