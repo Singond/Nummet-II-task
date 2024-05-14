@@ -218,7 +218,7 @@ rozdělené na $N \times N$ uzlů.
 """
 
 # ╔═╡ f6b654c7-0395-422c-b49e-d8a771625903
-N = 41
+N = 201
 
 # ╔═╡ f493e015-6831-4344-9dfc-fdc6f04ada72
 L = 10   # [nm]
@@ -287,7 +287,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ a3b74a06-c25e-4ecc-bfb1-c669e735809b
-eg = eigenvectors(Hg, 200)
+eg = eigenvectors(Hg, 800)
 
 # ╔═╡ 3c8b44de-2986-4cbb-aca3-fd88b78dee6b
 @bind kg html"<input type='range' min='1' max='41'>"
@@ -348,7 +348,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 """
 
 # ╔═╡ 952eeef1-f3bc-48bd-a974-21d4dea587aa
-eb = eigenvectors(Hb, 200)
+eb = eigenvectors(Hb, 800)
 
 # ╔═╡ 6f7138ab-133a-4e2a-9a56-87754b368450
 @bind kb html"<input type='range' min='1' max='41'>"

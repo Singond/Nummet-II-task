@@ -178,7 +178,7 @@ V0 = 2   # [eV]
 R = 2    # [nm]
 potential_c6v(x, y) = potential_c6v(x, y, V0, σ, R)
 
-N = 41
+N = 201
 L = 10   # [nm]
 x = LinRange(-L/2, L/2, N)
 y = LinRange(-L/2, L/2, N)
@@ -210,5 +210,5 @@ display(pb)
 # eg = eigvecs_wiki(T);
 # eg = eigvecs_wiki(Array(Hg))
 
-eg = Lanczos.eigvecs_wiki(Hg)
+eg = Lanczos.eigvecs_wiki(Hg, 800)
 heatmap(reshape(eg[:,1], N, N))
