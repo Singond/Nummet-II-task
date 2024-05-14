@@ -35,7 +35,7 @@ module Lanczos
 				V[:,j] = w ./ β[j]
 			else
 				error("β == 0, j = $j")
-				v = rand(n)
+				v = randn(n)
 				V[:,j] = v ./ norm(v)
 			end
 			w = A * V[:,j]
