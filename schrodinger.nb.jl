@@ -290,7 +290,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 eg = eigenvectors(Hg, 800, ones(N^2))
 
 # ╔═╡ 3c8b44de-2986-4cbb-aca3-fd88b78dee6b
-@bind kg html"k = <input type='number' value='1' min='1' max='41'>"
+@bind kg html"k = <input type='number' value='1' min='1' max='800'>"
 
 # ╔═╡ 11a63b16-1f0d-49d4-8a15-0cb726e2627a
 with(ratio=1, title="vlastní vektor $(kg)") do
@@ -351,7 +351,7 @@ Vlastní vektory hamiltoniánu spočtené zvolenou metodou:
 eb = eigenvectors(Hb, 800)
 
 # ╔═╡ 6f7138ab-133a-4e2a-9a56-87754b368450
-@bind kb html"<input type='number' value='1' min='1' max='41'>"
+@bind kb html"<input type='number' value='1' min='1' max='800'>"
 
 # ╔═╡ 16e7014f-d553-4a08-9dec-0e5f33946c3f
 with(ratio=1, title="vlastní vektor $(kb)") do
