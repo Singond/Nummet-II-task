@@ -271,7 +271,7 @@ md"Složky hamiltoniánu:"
 Tg, Vg = hamiltonian(x, y, potential_gauss, Δ=Δ, mass=electronmass)
 
 # ╔═╡ fa2b4e05-e07b-408d-886d-3f375da26f35
-with(ratio=1, title="potenciál V_g") do
+with(ratio=1, title="potenciál V_g", size=(400,430)) do
 	heatmap(x, y, Vg, xlabel="x [nm]", ylabel="y [nm]")
 end
 
@@ -296,7 +296,7 @@ erg = reshape(eg, N, N, :)
 @bind kg html"k = <input type='number' value='1' min='1' max='800'>"
 
 # ╔═╡ 11a63b16-1f0d-49d4-8a15-0cb726e2627a
-with(ratio=1, title="vlastní vektor $(kg)") do
+with(ratio=1, title="vlastní vektor $(kg)", size=(600,630)) do
 	heatmap(x, y, erg[:,:,kg],
 		xlabel="x [nm]", ylabel="y [nm]")
 end
@@ -343,7 +343,7 @@ md"Složky hamiltoniánu:"
 Tb, Vb = hamiltonian(x, y, potential_c6v, Δ=Δ, mass=electronmass)
 
 # ╔═╡ 2ff59f98-598b-444f-9be6-67b212ee4fe2
-with(ratio=1, title="potenciál V_b") do
+with(ratio=1, title="potenciál V_b", size=(400,430)) do
 	heatmap(x, y, Vb, xlabel="x [nm]", ylabel="y [nm]")
 end
 
@@ -368,7 +368,7 @@ erb = reshape(eb, N, N, :)
 @bind kb html"<input type='number' value='1' min='1' max='800'>"
 
 # ╔═╡ 16e7014f-d553-4a08-9dec-0e5f33946c3f
-with(ratio=1, title="vlastní vektor $(kb)") do
+with(ratio=1, title="vlastní vektor $(kb)", size=(600,630)) do
 	heatmap(x, y, erb[:,:,kb],
 		xlabel="x [nm]", ylabel="y [nm]")
 end
