@@ -2,6 +2,7 @@
 *.zip
 *profile.pb.gz
 *.jl.*.mem
+schrodinger.html
 
 *.aux
 *.fdb_latexmk
