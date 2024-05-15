@@ -210,6 +210,10 @@ eb = Lanczos.eigenvectors(Hb, 800, ones(N^2))
 
 #heatmap(reshape(eg[:,1], N, N))
 
+if !isdir("results")
+	mkdir("results/")
+end
+
 for k in 1:24
 	savefig(heatmap(x, y, reshape(eg[:,k], N, N), ratio=1),
 		@sprintf "results/eig-gauss-%02d.pdf" k)
