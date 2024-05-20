@@ -12,7 +12,7 @@ module Lanczos
 	Return a tridiagonal matrix `T` and orthonormal matrix `V`
 	such that `T = V' * A * V`.
 	"""
-	function lanczos_wiki(A, m, v)
+	function lanczos(A, m, v)
 		if ndims(A) != 2 || size(A)[1] != size(A)[2]
 			error("A must be a square matrix")
 		end
@@ -47,84 +47,21 @@ module Lanczos
 		T, V
 	end
 
-	lanczos_wiki(A, m) = lanczos_wiki(A, m, randn(size(A, 1)))
-	lanczos_wiki(A) = lanczos_wiki(A, round(Int, size(A, 1) / 2))
+	lanczos(A, m) = lanczos(A, m, randn(size(A, 1)))
+	lanczos(A) = lanczos(A, round(Int, size(A, 1) / 2))
 
 	"""
 	Return the first `m` eigenvectors of matrix `A`.
 
 	This implementation is based on the Wikipedia article on Lanczos method.
 	"""
-	function eigvecs_wiki(A, args...)
-		T, V = lanczos_wiki(A, args...)
+	function eigenvectors(A, args...)
+		T, V = lanczos(A, args...)
 		t = LinearAlgebra.eigvecs(T)
 		V * t
 	end
-
-	eigenvectors = eigvecs_wiki
-
-	"""
-	Return the eigenvectors of matrix `A`.
-
-	This is implementation is based on private lecture notes
-	and other sources.
-	"""
-	function eigvecs_custom(A, q)
-		n = size(A, 1)
-		α = zeros(n+1)
-		β = zeros(n)
-
-		q = q ./ norm(q)
-		α[1] = q' * A * q
-		r = A * q - α[1] * q
-		β[1] = norm(r)
-		qprev = q
-		q = r ./ β[1]
-
-		for j in 2:n
-			α[j] = q' * A * q
-			r = A * q - α[j] * q - β[j-1] * qprev
-			β[j] = norm(r)
-			qprev = q
-			q = r ./ β[j]
-		end
-		α[end] = q' * A * q
-		α,β
-	end
-
-	"""
-	Return the eigenvectors of matrix `A`.
-
-	This is a draft implementation based on the Wikipedia article.
-	"""
-	function eigvecs_old(A)
-		if ndims(A) != 2 || size(A)[1] != size(A)[2]
-			error("A must be a square matrix")
-		end
-		n = size(A)[1]
-		v = zeros(n)
-		α = zeros(n)
-		β = zeros(n)
-		β[1] = 1
-		j = 1
-		w = zeros(n)
-		while β[j] != 0
-			if j != 1
-				t = w
-				w = v ./ β[j]
-				v = -β[j] * t
-			end
-			v = A * w + v
-			j += 1
-			α[j] = w' * v
-			v -= α[j] * w
-			β[j] = norm(v)
-		end
-		α, β
-	end
 end
 
-#const global planck = 4.135667696E-15;      # [eVs]
 const global planckr = 1.054571817E-34;     # [Js]
 const global electronmass = 9.1093837E-31;  # [kg]
 const global elemcharge = 1.602176634E-19;  # [C]
@@ -201,22 +138,14 @@ with(ratio=1, xlabel="x [nm]", ylabel="y [nm]") do
 	global pg = heatmap(x, y, Vg)
 	global pb = heatmap(x, y, Vb)
 end
-
-display(pg)
-display(pb)
+# display(pg)
+# display(pb)
 
 eg = Lanczos.eigenvectors(Hg, 800, ones(N^2))
 eb = Lanczos.eigenvectors(Hb, 800, ones(N^2))
+erg = reshape(eg, N, N, :)
+erb = reshape(eb, N, N, :)
 
-#heatmap(reshape(eg[:,1], N, N))
-
-if !isdir("results")
-	mkdir("results/")
-end
-
-for k in 1:24
-	savefig(heatmap(x, y, reshape(eg[:,k], N, N), ratio=1),
-		@sprintf "results/eig-gauss-%02d.pdf" k)
-	savefig(heatmap(x, y, reshape(eb[:,k], N, N), ratio=1),
-		@sprintf "results/eig-benzene-%02d.pdf" k)
+with(ratio=1, xlabel="x [nm]", ylabel="y [nm]") do
+	heatmap(x, y, erg[:,:,1])
 end

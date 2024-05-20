@@ -37,7 +37,7 @@ md"""
 Return a tridiagonal matrix `T` and orthonormal matrix `V`
 such that `T = V' * A * V`.
 """
-function lanczos_wiki(A, m, v)
+function lanczos(A, m, v)
 	if ndims(A) != 2 || size(A)[1] != size(A)[2]
 		error("A must be a square matrix")
 	end
@@ -73,10 +73,10 @@ function lanczos_wiki(A, m, v)
 end
 
 # ╔═╡ d0eb243d-e4bb-4a90-87a7-9037682133fc
-lanczos_wiki(A, m) = lanczos_wiki(A, m, randn(size(A, 1)))
+lanczos(A, m) = lanczos(A, m, randn(size(A, 1)))
 
 # ╔═╡ fb023d5b-03ab-4ece-8171-6a92e8ae0335
-lanczos_wiki(A) = lanczos_wiki(A, round(Int, size(A, 1) / 2))
+lanczos(A) = lanczos(A, round(Int, size(A, 1) / 2))
 
 # ╔═╡ 754b31c7-4526-4411-9c0f-1c64f2d4d096
 """
@@ -84,76 +84,11 @@ Return the first `m` eigenvectors of matrix `A`.
 
 This implementation is based on the Wikipedia article on Lanczos method.
 """
-function eigvecs_wiki(A, args...)
-	T, V = lanczos_wiki(A, args...)
+function eigenvectors(A, args...)
+	T, V = lanczos(A, args...)
 	t = LinearAlgebra.eigvecs(T)
 	V * t
 end
-
-# ╔═╡ 9d94d614-ae23-4e58-84ff-0e597877e896
-"""
-Return the eigenvectors of matrix `A`.
-
-This is implementation is based on private lecture notes
-and other sources.
-"""
-function eigvecs_custom(A, q)
-	n = size(A, 1)
-	α = zeros(n+1)
-	β = zeros(n)
-
-	q = q ./ norm(q)
-	α[1] = q' * A * q
-	r = A * q - α[1] * q
-	β[1] = norm(r)
-	qprev = q
-	q = r ./ β[1]
-
-	for j in 2:n
-		α[j] = q' * A * q
-		r = A * q - α[j] * q - β[j-1] * qprev
-		β[j] = norm(r)
-		qprev = q
-		q = r ./ β[j]
-	end
-	α[end] = q' * A * q
-	α,β
-end
-
-# ╔═╡ 2002c9dc-bf92-4706-82c2-f5377ef2a7e8
-"""
-Return the eigenvectors of matrix `A`.
-
-This is a draft implementation based on the Wikipedia article.
-"""
-function eigvecs_old(A)
-	if ndims(A) != 2 || size(A)[1] != size(A)[2]
-		error("A must be a square matrix")
-	end
-	n = size(A)[1]
-	v = zeros(n)
-	α = zeros(n)
-	β = zeros(n)
-	β[1] = 1
-	j = 1
-	w = zeros(n)
-	while β[j] != 0
-		if j != 1
-			t = w
-			w = v ./ β[j]
-			v = -β[j] * t
-		end
-		v = A * w + v
-		j += 1
-		α[j] = w' * v
-		v -= α[j] * w
-		β[j] = norm(v)
-	end
-	α, β
-end
-
-# ╔═╡ aa6ddcbf-83aa-4a77-9f5d-08ff33ffd04a
-eigenvectors = eigvecs_wiki
 
 # ╔═╡ 24f01b2e-e881-4e1a-b2bc-c9ad2ec61f5e
 md"Planckova konstanta v Js:"
@@ -388,9 +323,6 @@ end
 # ╠═d0eb243d-e4bb-4a90-87a7-9037682133fc
 # ╠═fb023d5b-03ab-4ece-8171-6a92e8ae0335
 # ╠═754b31c7-4526-4411-9c0f-1c64f2d4d096
-# ╠═9d94d614-ae23-4e58-84ff-0e597877e896
-# ╠═2002c9dc-bf92-4706-82c2-f5377ef2a7e8
-# ╠═aa6ddcbf-83aa-4a77-9f5d-08ff33ffd04a
 # ╟─24f01b2e-e881-4e1a-b2bc-c9ad2ec61f5e
 # ╠═dd047f04-ddb2-433a-ac66-15fcdd8e1f96
 # ╟─fb942c72-f5d1-4f12-a560-cf0a2c85b41d
