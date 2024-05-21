@@ -6,7 +6,9 @@ solutions of the Schrödinger equation.
 
 This is a semestral project for a course on advanced numerical methods.
 
-![Example solution](img/example.png)
+<div align="center">
+  <img src="img/example.png" width="201" height="201"/>
+</div>
 
 Running the code
 ----------------
