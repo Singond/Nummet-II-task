@@ -29,7 +29,19 @@ end
 
 # ╔═╡ 73286b82-618c-40fb-80c4-f7cd8547b5cd
 md"""
-# Řešení 2D Schrövnice Lanczosovou diagonalizací
+# Řešení 2D Schrödingerovy rovnice Lanczosovou diagonalizací
+
+Tento dokument je výpočetní notebook pro [Pluto.jl](https://plutojl.org/).
+Jeho zdrojová podoba je veřejně dostupná
+[zde](https://github.com/Singond/Nummet-II-task/blob/master/schrodinger.nb.jl).
+Omluvte, prosím, nedokonalé stránkování, které zatím Pluto neumí opravit.
+
+Vizte také:
+- repozitář se všemi variantami kódu:
+  <https://github.com/Singond/Nummet-II-task>;
+- mírně upravený notebook pro JuliaHub, který můžete pustit online bez nutnosti
+  instalace Julie a balíku `Pluto.jl`:
+  <https://juliahub.com/ui/Notebooks/Singond/School/schrodinger_makie.nb.jl>.
 """
 
 # ╔═╡ ea5bc82e-0283-4bde-8c98-c439edb3c13c
